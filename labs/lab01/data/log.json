@@ -1,0 +1,50 @@
+[
+    {
+        "event": "login",
+        "user": "admin_user",
+        "result": "success",
+        "timestamp": "2026-09-11 10:38:01",
+        "args": [],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "sec_officer",
+        "result": "failure",
+        "timestamp": "2026-09-11 10:38:01",
+        "args": [],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_user",
+        "result": "failure",
+        "timestamp": "2026-09-11 10:38:01",
+        "args": [],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "admin_user",
+        "result": "success",
+        "timestamp": "2026-09-11 10:44:17",
+        "args": [],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "sec_officer",
+        "result": "failure",
+        "timestamp": "2026-09-11 10:44:17",
+        "args": [],
+        "kwargs": {}
+    },
+    {
+        "event": "login",
+        "user": "unknown_user",
+        "result": "failure",
+        "timestamp": "2026-09-11 10:44:17",
+        "args": [],
+        "kwargs": {}
+    }
+]
