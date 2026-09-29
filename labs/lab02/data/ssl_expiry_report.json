@@ -1,0 +1,82 @@
+[
+  {
+    "domain": "ok.example.invalid",
+    "issuer": "Let's Encrypt",
+    "valid_to": "2026-11-29",
+    "days_left": 61,
+    "status": "OK",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "weak_algorithm": false,
+    "key_length": 2048
+  },
+  {
+    "domain": "soon.example.invalid",
+    "issuer": "Let's Encrypt",
+    "valid_to": "2026-10-10",
+    "days_left": 11,
+    "status": "WARNING",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "weak_algorithm": false,
+    "key_length": 2048
+  },
+  {
+    "domain": "expired.example.invalid",
+    "issuer": "DigiCert",
+    "valid_to": "2026-09-20",
+    "days_left": -9,
+    "status": "EXPIRED",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "weak_algorithm": false,
+    "key_length": 2048
+  },
+  {
+    "domain": "weak-sha1.example.invalid",
+    "issuer": "Legacy CA",
+    "valid_to": "2027-01-01",
+    "days_left": 94,
+    "status": "OK",
+    "signature_algorithm": "sha1WithRSAEncryption",
+    "weak_algorithm": true,
+    "key_length": 2048
+  },
+  {
+    "domain": "weak-md5.example.invalid",
+    "issuer": "Legacy CA",
+    "valid_to": "2027-02-01",
+    "days_left": 125,
+    "status": "OK",
+    "signature_algorithm": "md5WithRSAEncryption",
+    "weak_algorithm": true,
+    "key_length": 1024
+  },
+  {
+    "domain": "ecdsa.example.invalid",
+    "issuer": "Sectigo",
+    "valid_to": "2026-12-01",
+    "days_left": 63,
+    "status": "OK",
+    "signature_algorithm": "ecdsa-with-SHA256",
+    "weak_algorithm": false,
+    "key_length": 256
+  },
+  {
+    "domain": "warning-edge.example.invalid",
+    "issuer": "DigiCert",
+    "valid_to": "2026-10-27",
+    "days_left": 28,
+    "status": "WARNING",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "weak_algorithm": false,
+    "key_length": 2048
+  },
+  {
+    "domain": "later.example.invalid",
+    "issuer": "Sectigo",
+    "valid_to": "2027-09-01",
+    "days_left": 337,
+    "status": "OK",
+    "signature_algorithm": "sha384WithRSAEncryption",
+    "weak_algorithm": false,
+    "key_length": 4096
+  }
+]

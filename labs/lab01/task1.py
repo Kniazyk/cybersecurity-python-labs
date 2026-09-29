@@ -2,13 +2,9 @@ import os
 import random
 import sys
 
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../")
-    )
-)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from shared.student import STUDENT_NAME, GROUP_NAME, VARIANT_NUMBER
+from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
 passwords = [
     "S0cial@Engineer",
@@ -21,6 +17,7 @@ passwords = [
     "generic",
     "Bug@B0unty",
     "standard123",
+    "QQQ1",
 ]
 
 criteria = {
@@ -45,18 +42,20 @@ def analyze_password(pwd: str, all_pwds: list) -> str:
         return "Заборонений"
 
     min_len = criteria["min_length"]
-    has_digit = any(c.isdigit() for c in pwd)
-    has_upper = any(c.isupper() for c in pwd)
-    has_lower = any(c.islower() for c in pwd)
-    has_spec = any(not c.isalnum() for c in pwd)
+    has_digit = any(c.isdigit() for c in pwd)  # Чи є символ цифрою
+    has_upper = any(c.isupper() for c in pwd)  # Перевірка великої літери
+    has_lower = any(
+        c.islower() for c in pwd
+    )  # Перевіряється наявність хоча б однієї маленької літери
+    has_spec = any(
+        not c.isalnum() for c in pwd
+    )  # чи є символ, який не є буквою або цифрою
 
-    # Перевірка виконання всіх обов'язкових критеріїв
-    all_criteria_met = (
-            len(pwd) >= min_len and has_digit and has_upper and has_spec
-    )
-    is_unique = all_pwds.count(pwd) == 1
+    # Перевірка виконання всіх основних критеріїв
+    all_criteria_met = len(pwd) >= min_len and has_digit and has_upper and has_spec
+    is_unique = all_pwds.count(pwd) == 1  # Перевірка унікальності
 
-    if len(pwd) < min_len:
+    if len(pwd) < min_len:  # Перевірка на занадто короткий пароль
         return "Слабкий (короткий)"
 
     if all_criteria_met:
@@ -65,7 +64,9 @@ def analyze_password(pwd: str, all_pwds: list) -> str:
             return "Дуже сильний"
         return "Сильний"
 
-    met_count = sum([has_digit, has_upper, has_lower, has_spec])
+    met_count = sum(
+        [has_digit, has_upper, has_lower, has_spec]
+    )  # скільки характеристик має пароль
     if met_count >= 2:
         return "Середній"
 
@@ -73,11 +74,13 @@ def analyze_password(pwd: str, all_pwds: list) -> str:
 
 
 def run_task1():
-    print(f"=== Завдання 1 | Студент: {STUDENT_NAME} ({GROUP_NAME}), Варіант {VARIANT_NUMBER} ===")
+    print(
+        f"=== Завдання 1 | Студент: {STUDENT_NAME} ({GROUP_NAME}), Варіант {VARIANT_NUMBER} ==="
+    )
 
     pwd_list = passwords.copy()
     random.seed(42)
-    dup_indices = random.sample(range(len(pwd_list)), 3)
+    dup_indices = random.sample(range(len(pwd_list)), 3)  # Вибір трьох паролів
     for idx in dup_indices:
         pwd_list.append(pwd_list[idx])
 
@@ -85,7 +88,7 @@ def run_task1():
     print(f"{'Пароль':<22} | {'Статус':<20}")
     print("-" * 45)
 
-    for pwd in pwd_list:
+    for pwd in pwd_list:  # Аналіз усіх паролів
         status = analyze_password(pwd, pwd_list)
         print(f"{pwd:<22} | {status:<20}")
 

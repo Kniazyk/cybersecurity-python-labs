@@ -1,11 +1,7 @@
 import os
 import sys
 
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../")
-    )
-)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
 from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
@@ -59,22 +55,24 @@ security_levels = ("Consumer", "Business", "Enterprise", "Critical Systems")
 blocked_users = {"demo_account", "compromised_device", "malicious_app"}
 
 
-def check_access(user_id: str, resource_name: str, resource_level: int) -> str:
+def check_access(
+    user_id: str, resource_name: str, resource_level: int
+) -> str:  # Перевірка доступу користувача
 
-    if user_id not in users: # Перевірка доступу користувача
+    if user_id not in users:  # Чи є такий користувач
         return "DENY (User not found)"
 
-    if user_id in blocked_users:
+    if user_id in blocked_users:  # Чи знаходиться користувач у списку заблокованих
         return "DENY (User is blocked)"
 
     user_info = users[user_id]
 
-    if not user_info.get("active", False):
+    if not user_info.get("active", False):  # Чи активний обліковий запис
         return "DENY (Account inactive)"
 
-    user_clearance = user_info.get("clearance", 0)
+    user_clearance = user_info.get("clearance", 0)  # Отримання рівня допуску
 
-    if user_clearance >= resource_level:
+    if user_clearance >= resource_level:  # Основна перевірка доступу
         return "ALLOW"
 
     return "DENY (Insufficient clearance)"
@@ -93,9 +91,11 @@ def run_task2():
 
     print("\n--- Результати перевірки доступу ---")
 
-    test_user_ids = list(users.keys()) + ["guest_user"]   # Перевірка всіх користувачів
+    test_user_ids = list(users.keys()) + ["guest_user"]
 
-    for u_id in test_user_ids:
+    for (
+        u_id
+    ) in test_user_ids:  # Для кожного користувача перевірити доступ до кожного ресурсу
         for res_name, res_level in resources:
             result = check_access(u_id, res_name, res_level)
             print(f"user=[{u_id}] resource=[{res_name}] -> {result}")
