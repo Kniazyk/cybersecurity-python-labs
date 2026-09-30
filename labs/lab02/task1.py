@@ -1,19 +1,15 @@
-"""Завдання 1: модель користувача, сесії та журналу аудиту (ООП)."""
-
 import hashlib
 import hmac
 import os
 import re
-from _datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import ClassVar
 
-# Кількість ітерацій PBKDF2. Чим більше, тим повільніше перебір паролів.
 PBKDF2_ITERATIONS = 600_000
-# Розмір випадкової солі в байтах.
 SALT_SIZE_BYTES = 16
 
-# Локальна частина: латинська літера + ще 2..63 символи (разом 3-64),
+# латинська літера + ще 2..63 символи (разом 3-64),
 # далі @ і домен щонайменше з однією крапкою.
 EMAIL_PATTERN = re.compile(
     r"[A-Za-z][A-Za-z0-9_]{2,63}"
@@ -22,8 +18,6 @@ EMAIL_PATTERN = re.compile(
 
 
 class User:
-    """Користувач системи з безпечним зберіганням пароля."""
-
     def __init__(
         self,
         username: str,
@@ -33,14 +27,14 @@ class User:
         active: bool = True,
     ) -> None:
         self.username = username
-        self.email = email  # викликає setter, тобто перевірку
+        self.email = email
         self.role = role
         self.active = active
         self.__password_hash = b""
         self.__password_salt = b""
         self.set_password(password)
 
-    # ---------- email як property ----------
+    # email як property
     @property
     def email(self) -> str:
         return self._email
@@ -51,7 +45,7 @@ class User:
             raise ValueError(f"Некоректний email: {value!r}")
         self._email = value
 
-    # ---------- робота з паролем ----------
+    # робота з паролем
     @staticmethod
     def _derive_key(password: str, salt: bytes) -> bytes:
         return hashlib.pbkdf2_hmac(
@@ -113,7 +107,7 @@ class Admin(User):
 
 
 class Session:
-    """Сесія користувача: IP, час входу та останньої активності (UTC)."""
+    """Сесія користувача: IP, час входу та останньої активності."""
 
     def __init__(self, ip: str) -> None:
         self.ip = ip
@@ -226,7 +220,7 @@ class UserAccount:
     def session(self) -> Session | None:
         return self._session
 
-    # ---------- __getitem__ / __setitem__ ----------
+    # __getitem__ / __setitem__
     def __getitem__(self, key: str):
         if key not in self._ALLOWED_FIELDS:
             raise KeyError(f"Невідомий ключ: {key!r}")

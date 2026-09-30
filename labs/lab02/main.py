@@ -1,5 +1,3 @@
-"""Точка входу лабораторної роботи №2: команди demo та analyze."""
-
 from __future__ import annotations
 
 import argparse
@@ -7,15 +5,16 @@ import sys
 import time
 from pathlib import Path
 
-from labs.lab02.task1 import Admin, User, UserAccount
+from labs.lab02.task1 import Admin, AuditLog, User, UserAccount
 from labs.lab02.task2 import configure_logging
 from labs.lab02.task2 import run_analyze as task2_run_analyze
 
 
 def run_demo() -> None:
-    """Демонстрація роботи класів Завдання 1 (ООП)."""
+    """Демонстрація роботи класів Завдання 1."""
     print("=== 1. Створення користувача та облікового запису ===")
     user = User("alice", "alice_01@example.com", "user", "S3cret!pass")
+    shared_log = AuditLog()
     account = UserAccount(user)
     print(user)
 
@@ -24,7 +23,9 @@ def run_demo() -> None:
     print(f"Вхід виконано: {ok}, автентифікація активна: {account.is_authenticated()}")
 
     print("\n=== 3. Невдалий вхід (неправильний пароль) ===")
-    fresh_account = UserAccount(User("bob", "bob_1@example.com", "user", "Correct1!"))
+    fresh_account = UserAccount(
+        User("bob", "bob_1@example.com", "user", "Correct1!"), shared_log
+    )
     fail = fresh_account.login("bob", "wrong-password", "10.0.0.9")
     print(
         f"Вхід виконано: {fail}, "
@@ -78,7 +79,7 @@ def run_analyze(args: argparse.Namespace) -> int:
             output_report=args.output_report,
             fmt=args.format,
         )
-    except (FileNotFoundError, ValueError, KeyError, TypeError) as exc:
+    except (FileNotFoundError, ValueError, KeyError, TypeError, OSError) as exc:
         print(f"[ERROR] {exc}")
         return 1
     return 0
@@ -110,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "demo":
         run_demo()
     elif args.command == "analyze":
-        run_analyze(args)
+        return run_analyze(args)
 
     return 0
 

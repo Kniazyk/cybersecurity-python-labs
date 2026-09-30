@@ -1,11 +1,3 @@
-"""Завдання 2 (Варіант 10): монітор термінів дії SSL/TLS сертифікатів.
-
-Утиліта читає JSON-файл із даними про SSL/TLS-сертифікати (Domain, Issuer,
-ValidFrom, ValidTo, KeyLength, SignatureAlgorithm), рахує кількість днів до
-закінчення терміну дії, шукає прострочені сертифікати та слабкі алгоритми
-підпису, агрегує сертифікати за видавцями та формує звіт у JSON або CSV.
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -113,7 +105,13 @@ def build_report_rows(
     for cert in certificates:
         domain = cert["domain"]
         issuer = cert["issuer"]
-        valid_to = parse_date(cert["validTo"])
+        try:
+            valid_to = parse_date(cert["validTo"])
+        except (ValueError, TypeError) as exc:
+            raise ValueError(
+                f"Некоректна дата validTo у сертифіката {domain}: "
+                f"{cert['validTo']!r} (очікується YYYY-MM-DD)"
+            ) from exc
         signature_algorithm = cert["signatureAlgorithm"]
 
         days_left = calculate_days_left(valid_to, today)
@@ -223,7 +221,7 @@ def run_analyze(
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
-    """Створює парсер аргументів командного рядка для самостійного запуску."""
+
     parser = argparse.ArgumentParser(
         description="Монітор термінів дії SSL/TLS сертифікатів (Варіант 10)."
     )
@@ -255,14 +253,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Точка входу при запуску task2.py напряму (для налагодження)."""
     configure_logging()
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 
     try:
         run_analyze(args.certs_data, args.days_warning, args.output_report, args.format)
-    except (FileNotFoundError, ValueError, KeyError, TypeError) as exc:
+    except (FileNotFoundError, ValueError, KeyError, TypeError, OSError) as exc:
         logger.error("Помилка виконання: %s", exc)
         return 1
 
