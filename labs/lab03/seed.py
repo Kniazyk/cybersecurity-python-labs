@@ -62,7 +62,7 @@ def main() -> int:
     """Запустити заповнення та вивести зрозуміле повідомлення."""
     try:
         seeded = seed_database()
-    except (OSError, ValueError, repository.RepositoryError) as error:
+    except (OSError, TypeError, ValueError, repository.RepositoryError) as error:
         print(f"Помилка початкового заповнення, зміни скасовано: {error}")
         return 1
     if seeded:

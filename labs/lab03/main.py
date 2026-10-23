@@ -4,6 +4,8 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
@@ -78,3 +80,13 @@ def handle_constraint(_request: Request, error: repository.ConstraintError):
 def handle_database(_request: Request, error: repository.DatabaseError):
     """500 без технічних деталей."""
     return JSONResponse(status_code=500, content={"detail": str(error)})
+
+
+@app.exception_handler(RequestValidationError)
+def handle_validation(_request: Request, error: RequestValidationError):
+    """422 без поля input: там може бути NaN, який не серіалізується в JSON."""
+    details = [
+        {key: value for key, value in item.items() if key != "input"}
+        for item in error.errors()
+    ]
+    return JSONResponse(status_code=422, content={"detail": jsonable_encoder(details)})
